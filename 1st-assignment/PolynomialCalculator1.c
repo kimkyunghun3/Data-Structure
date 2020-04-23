@@ -89,7 +89,7 @@ int poly_eval(polynomial p, int x)
         sum += pow((double)x, (double)i) * chosenFunction[i];
     }
 
-    printf("값: %d\n", (int)sum);
+    printf("결과값은 %d\n", (int)sum);
 }
 
 void print_poly(polynomial p)

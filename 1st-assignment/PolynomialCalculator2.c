@@ -125,9 +125,13 @@ void poly_multi2(int As, int Ae, int Bs, int Be, int* Ds, int* De)
         }
     }
 
-    result[avail].coef = result[Ae].coef * result[Be].coef;
-    result[avail].expon = result[Ae].expon + result[Be].expon;
-    avail++;
+
+    if (result[Ae].expon == 0 && result[Be].expon == 0) {
+        result[avail].coef = result[Ae].coef * result[Be].coef;
+        result[avail].expon = result[Ae].expon + result[Be].expon;
+        avail++;
+    }
+
 
     *De = avail - 1;
 }
@@ -136,7 +140,7 @@ void poly_multi2(int As, int Ae, int Bs, int Be, int* Ds, int* De)
 int poly_eval(int start, int finish, int x)
 {
     int i, expon;
-    int temp[MAX_TERMS] = { 0 };                            // 계산할 식을 복사하기 위한 배열                          
+    int temp[MAX_TERMS] = { 0 };                            // 계산할 식을 복사하기 위한 배열
     int sum = 0;
 
     if (start <= finish)
@@ -150,7 +154,7 @@ int poly_eval(int start, int finish, int x)
                 temp[i] *= x;
         }
 
-        // 마지막 항을 출력 
+        // 마지막 항을 출력
         if (terms[finish].expon != 0)                       // 마지막 항의 차수가 0이 아닐 때
         {
             terms[finish].coef *= x;
@@ -164,7 +168,7 @@ int poly_eval(int start, int finish, int x)
             sum += temp[i];
         sum += terms[finish].coef;
 
-        printf("sum = %d\n ", sum);
+        printf("결과값은 %d\n ", sum);
     }
 
     else
@@ -183,11 +187,10 @@ int poly_evalMulti(int start, int finish, int x)
             temp[i] = result[i].coef;
         for (i = start; i < finish; i++)
         {
-            //temp*=x; 
             for (int j = 0; j < result[i].expon; j++)
                 temp[i] *= x;
         }
-        // 마지막 항을 출력 
+        // 마지막 항을 출력
         if (result[finish].expon != 0)
         {
             result[finish].coef *= x;
@@ -200,7 +203,7 @@ int poly_evalMulti(int start, int finish, int x)
         for (i = start; i <= finish; i++)
             sum += temp[i];
         sum += result[finish].coef;
-        printf("sum = %d\n ", sum);
+        printf("결과값은 %d\n ", sum);
     }
     else
         printf(" No terms ");
@@ -238,7 +241,7 @@ int main() {
     int i, n;
     int x, y;
     int input;
-    polynomial a, b, c, d;
+
     printf("수식 1은 몇 개의 항으로 구성되어 있나요? ");
     scanf("%d", &n);
 
@@ -258,6 +261,7 @@ int main() {
     printf("수식 2는 몇 개의 항으로 구성되어 있나요? ");
     scanf("%d", &n);
 
+
     Bs = avail;
     printf("수식 2를 입력하세요: ");
     for (i = 0;i < n;i++) {
@@ -272,6 +276,7 @@ int main() {
     print_poly(Bs, Be);
     printf("\n");
 
+    // 덧셈 결과와 곱셈 결과를 따로 저장하기 위해 수식 1과 수식 2를 result배열에 복사
     for (i = 0;i <= Be;i++) {
         result[i].expon = terms[i].expon;
         result[i].coef = terms[i].coef;
@@ -288,7 +293,6 @@ int main() {
     print_multi(Ds, De);
     printf("\n");
     int num;
-
 
     while (1)
     {
